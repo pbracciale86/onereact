@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
+import Error from "./error";
 
-let Formulario = () => {
+//declaro el componente, recibo las props de app
+
+let Formulario = ({pacientes, setPacientes}) => {
+
     const [nombre, setNombre]=useState("");
     const [propietario, setPropietario]=useState("");
     const [email, setEmail]=useState("");
@@ -14,7 +18,28 @@ let Formulario = () => {
             setError(true);
             return;
         }
-            setError(false);
+            setError(false)
+            
+            const objetoPaciente = {
+                nombre, 
+                propietario, 
+                email, 
+                fecha, 
+                sintomas
+            }
+
+            /* utilizo el modificador setPacientes, incorporo spreed operator que no modifica arreglo original
+            y paso un nuevo paciente como objeto */
+
+            setPacientes ([...pacientes, objetoPaciente])
+
+            // reinicio formulario. Dejamos el state como string vacio que se renderiza por el 
+
+            setNombre ("")
+            setPropietario("")
+            setEmail("")
+            setFecha("")
+            setSintomas("")
     }
     return (
         <div className="md:w-1/2 lg:w-2/5 mx-5">
@@ -26,11 +51,7 @@ let Formulario = () => {
                 onSubmit={handleSubmit}
                 className="bg-white shadow-md rounded-lg py-10 px-5 mb-10"
             >
-                {error && 
-                    <div className="bg-red-800 text-white text-center p-3 uppercase font-bold mb-3 rounded-md">
-                        <p> Todos los campos son obligatorios </p>
-                    </div>
-                }
+                {error && <Error/> }
                     <div className="mb-5">
                         <label className="block text-gray-700 uppercase font-bold" htmlFor="mascota"> Nombre mascota </label>
                         <input 
